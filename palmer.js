@@ -9,26 +9,22 @@ var original_sample = {
 	{
 	    "name": "file1",
 	    "type": "text",
-	    "contents": "Hello",
-	    "description": "1st file"
+	    "contents": "Hello"
 	},
 	{
 	    "name": "file2",
 	    "type": "text",
-	    "contents": "World!",
-	    "description": "2nd file"
+	    "contents": "World!"
 	},
 	{
 	    "name": "javascript_image",
 	    "type": "img",
-	    "contents": "Javascript.png",
-	    "description": "1st image file"
+	    "contents": "Javascript.png"
 	},
 	{
 	    "name": "Palmer_Cluff_Github",
 	    "type": "link",
-	    "contents": "https://github.com/palmercluff",
-	    "description": "External link to GitHub account"
+	    "contents": "https://github.com/palmercluff"
 	},
 	{
 	    "name": "dir1",
@@ -37,14 +33,12 @@ var original_sample = {
 		{
 		    "name": "file3",
 		    "type": "text",
-		    "contents": "Game",
-		    "description": "3rd file"
+		    "contents": "Game"
 		},
 		{
 		    "name": "file4",
 		    "type": "text",
-		    "contents": "Over!",
-		    "description": "4th file"
+		    "contents": "Over!"
 		},
 		{
 		    "name": "dir2",
@@ -53,8 +47,7 @@ var original_sample = {
 			{
 			    "name": "file5",
 			    "type": "text",
-			    "contents": "Blah",
-			    "description": "5th file"
+			    "contents": "Blah"
 			},
 			{
 			    "name": "dir3",
@@ -63,8 +56,7 @@ var original_sample = {
 				{
 				    "name": "file6",
 				    "type": "text",
-				    "contents": "Blah blah blah",
-				    "description": "6th file"
+				    "contents": "Blah blah blah"
 				},
 			    ]
 			}
@@ -339,7 +331,7 @@ function processInput(str){
     }
 
     else if (array[0] === 'help'){
-	return 'Commands are:<br style="line-height:140%;">bell browser cat cd clear echo exit gimp help ls pwd touch';
+	return 'Commands are:<br style="line-height:140%;">bell browser cat cd clear echo exit gimp help ls pwd save touch';
     }
 
     else if (array[0] === 'ls'){
@@ -361,10 +353,11 @@ function processInput(str){
 
     else if (array[0] === 'save'){
 	var dataStr = "data:text/json;charset=utf-8," + encodeURIComponent(JSON.stringify(sample));
-	var dlAnchorElem = document.getElementById('downloadAnchorElem');
-	dlAnchorElem.setAttribute("href",     dataStr     );
-	dlAnchorElem.setAttribute("download", "saved_filesystem.json");
-	dlAnchorElem.click();
+	var downloadAnchorNode = document.createElement('a');
+	downloadAnchorNode.setAttribute("href",     dataStr);
+	downloadAnchorNode.setAttribute("download", "saved_filesystem.json");
+	downloadAnchorNode.click();
+	downloadAnchorNode.remove();
     }
 
     else if (array[0] === 'touch'){
