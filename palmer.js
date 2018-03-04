@@ -1,4 +1,3 @@
-var marginTop = 5;
 var user = 'palmer@palmercluff.com'
 var currentDirectory = '';
 var userLine = ''
@@ -77,15 +76,16 @@ function PalmerJS(){
 
     getRootDirectory(sample);
 
+    document.body.style.backgroundColor = "black";
+
     var terminal = document.createElement('div');
-    terminal.style.cssText = 'width:500px;height:500px;background-color:grey;';
+    terminal.style.cssText = 'width:100%;height:100%;';
     terminal.id = 'terminal';
     document.body.appendChild(terminal);
 
     var inputField = document.createElement('input');
-    inputField.style.cssText = 'position:absolute;outline:none;border:none;display:block;color:red;background-color:grey;opacity:0;z-index:-100;';
+    inputField.style.cssText = 'position:fixed;outline:none;border:none;display:block;color:red;background-color:grey;opacity:0;z-index:-100;bottom:0px';
     inputField.id = 'inputField';
-    inputField.style.marginTop = marginTop + 'px';
     inputField.onblur = function(){
 	this.focus();
     }
@@ -97,7 +97,7 @@ function PalmerJS(){
 	    var terminal = document.getElementById('terminal');
 	    
 	    var br = document.createElement('br');
-	    br.style.cssText = 'line-height:140%;';
+	    br.style.cssText = 'line-height:130%;';
 	    terminal.appendChild(br);
 
 	    var cursor = document.getElementById('cursor');
@@ -113,7 +113,7 @@ function PalmerJS(){
 
 	    if (result != null){
 		var output = document.createElement('div');
-		output.style.cssText = 'color:black;font-size:16px;font-family:monospace;white-space:pre-wrap;';
+		output.style.cssText = 'color:white;font-size:16px;font-family:monospace;white-space:pre-wrap;';
 		output.className = 'output';
 		output.innerHTML = result;
 		terminal.appendChild(output);
@@ -121,17 +121,15 @@ function PalmerJS(){
 	    
 	    var inputField = document.getElementById('inputField');
 	    inputField.value = '';
-	    marginTop += 50;
-	    inputField.style.marginTop = marginTop + 'px';
 
 	    var inputDisplay = document.createElement('span');
-	    inputDisplay.style.cssText = 'display:inline-block;float:left;font-family:monospace;white-space:pre-wrap;font-size:16px;';
+	    inputDisplay.style.cssText = 'color:white;display:inline-block;float:left;font-family:monospace;white-space:pre-wrap;font-size:16px;';
 	    inputDisplay.id = 'inputDisplay';
 	    inputDisplay.textContent = userLine;
 	    terminal.appendChild(inputDisplay);
 
 	    var cursor = document.createElement('span');
-	    cursor.style.cssText = 'position:fixed;background-color:white;width:10px;height:20px;float:left;';
+	    cursor.style.cssText = 'background-color:white;width:10px;height:20px;float:left;';
 	    cursor.id = 'cursor';
 	    terminal.appendChild(cursor);
 	}
@@ -140,18 +138,26 @@ function PalmerJS(){
 		document.getElementById('inputDisplay').textContent = userLine + this.inputField.value;
 	    }, 10);
 	}
+
+	window.scrollTo(0,document.body.scrollHeight);
     }
     terminal.appendChild(inputField);
     this.inputField = inputField;
 
+    var output = document.createElement('div');
+    output.style.cssText = 'color:white;font-size:16px;font-family:monospace;white-space:pre-wrap;';
+    output.className = 'output';
+    output.innerHTML = motd();
+    terminal.appendChild(output);
+
     var inputDisplay = document.createElement('span');
-    inputDisplay.style.cssText = 'display:inline-block;float:left;font-family:monospace;white-space:pre-wrap;font-size:16px;';
+    inputDisplay.style.cssText = 'color:white;display:inline-block;float:left;font-family:monospace;white-space:pre-wrap;font-size:16px;';
     inputDisplay.id = 'inputDisplay';
     inputDisplay.textContent = userLine;
     terminal.appendChild(inputDisplay);
 
     var cursor = document.createElement('span');
-    cursor.style.cssText = 'position:fixed;background-color:white;width:10px;height:20px;float:left;';
+    cursor.style.cssText = 'background-color:white;width:10px;height:20px;float:left;';
     cursor.id = 'cursor';
     terminal.appendChild(cursor);
 
@@ -288,13 +294,13 @@ function processInput(str){
 	while(oldInputDisplays.length > 0){
 	    oldInputDisplays[0].parentNode.removeChild(oldInputDisplays[0]);
 	}
-	marginTop = 5;
+	
 	return null;
     }
 
     else if (array[0] === 'echo'){
 	if (array.length === 1){
-	    return '<br style="line-height:140%">';
+	    return '<br style="line-height:130%">';
 	}
 	if (array[2] === '>' && array[3] != null){
 	    for (var key in sample){
@@ -331,7 +337,7 @@ function processInput(str){
     }
 
     else if (array[0] === 'help'){
-	return 'Commands are:<br style="line-height:140%;">bell browser cat cd clear echo exit gimp help ls pwd save touch';
+	return 'Commands are:<br>bell browser cat cd clear echo exit gimp help ls pwd save touch';
     }
 
     else if (array[0] === 'ls'){
@@ -382,4 +388,8 @@ function getRootDirectory(filesystem){
     console.log(filesystem);
     currentDirectory = filesystem.name;
     userLine = user + ':' + currentDirectory + '$ ';
+}
+
+function motd(){
+    return " ____   __    __    __  __  ____  ____     ____  ___ <br>(  _ \\ /__\\  (  )  (  \\/  )( ___)(  _ \\   (_  _)/ __)<br> )___//(__)\\  )(__  )    (  )__)  )   /  .-_)(  \\__ \\<br>(__) (__)(__)(____)(_/\\/\\_)(____)(_)\\_)()\\____) (___/<br>Version Alpha<br><br>";
 }
