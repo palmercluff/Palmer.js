@@ -1,7 +1,11 @@
-var user = 'palmer@palmercluff.com'
+var user;
 var currentDirectory = '';
 var userLine = ''
+var version = 'Alpha';
+var codeName = 'Tottori';
+var inputField;
 var original_sample = {
+    'user':'palmer',
     'name':'~',
     'type':'dir',
     'contents':[
@@ -70,9 +74,6 @@ var sample = original_sample;
 var previous_directories = [];
 
 function PalmerJS(){
-    this.version = 'Alpha';
-    this.codeName = 'Tottori';
-    this.inputField;
 
     getRootDirectory(sample);
 
@@ -83,7 +84,7 @@ function PalmerJS(){
     terminal.id = 'terminal';
     document.body.appendChild(terminal);
 
-    var inputField = document.createElement('input');
+    inputField = document.createElement('input');
     inputField.style.cssText = 'position:fixed;outline:none;border:none;display:block;color:red;background-color:grey;opacity:0;z-index:-100;bottom:0px';
     inputField.id = 'inputField';
     inputField.onblur = function(){
@@ -119,7 +120,7 @@ function PalmerJS(){
 		terminal.appendChild(output);
 	    }
 	    
-	    var inputField = document.getElementById('inputField');
+	    inputField = document.getElementById('inputField');
 	    inputField.value = '';
 
 	    var inputDisplay = document.createElement('span');
@@ -135,14 +136,13 @@ function PalmerJS(){
 	}
 	else{
 	    setTimeout(function(){
-		document.getElementById('inputDisplay').textContent = userLine + this.inputField.value;
+		document.getElementById('inputDisplay').textContent = userLine + inputField.value;
 	    }, 10);
 	}
 
 	window.scrollTo(0,document.body.scrollHeight);
     }
     terminal.appendChild(inputField);
-    this.inputField = inputField;
 
     var output = document.createElement('div');
     output.style.cssText = 'color:white;font-size:16px;font-family:monospace;white-space:pre-wrap;';
@@ -164,15 +164,6 @@ function PalmerJS(){
     startBlinkingCursor();
 
     document.getElementById('inputField').focus();
-    
-    this.bell = function(){
-	var audio = new Audio('beep.mp3');
-	audio.play();
-    }
-    
-    this.log = function(data){
-	console.log(data);
-    }
 }
 
 function startBlinkingCursor(){
@@ -242,6 +233,9 @@ function processInput(str){
 
 	else if (array[1] === '..' || array[1] === '../'){
 	    var currentDirectoryLength = sample.name.length;
+	    if (sample.name === '~'){
+		return null;
+	    }
 	    if (previous_directories.length === 1){
 		currentDirectory = currentDirectory.substring(0, currentDirectory.length - (currentDirectoryLength + 2));
 	    }
@@ -386,6 +380,7 @@ function processInput(str){
 
 function getRootDirectory(filesystem){
     console.log(filesystem);
+    user = filesystem.user + '@palmercluff.com'
     currentDirectory = filesystem.name;
     userLine = user + ':' + currentDirectory + '$ ';
 }
